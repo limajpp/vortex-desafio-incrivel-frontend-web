@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Login } from "./components/auth/signIn";
+import { SignIn } from "./components/auth/signIn";
 import { SignUp } from "./components/auth/signUp";
 import { AuthLayout } from "./components/layouts/authLayout";
 
@@ -8,8 +8,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Route>
 
