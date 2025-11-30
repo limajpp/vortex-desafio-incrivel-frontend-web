@@ -1,5 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Eye, EyeOff } from "lucide-react";
@@ -14,75 +23,63 @@ export function Login() {
   }
 
   return (
-    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-      <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Welcome!</h1>
-        <p className="text-sm text-muted-foreground">
-          Enter your credentials to access the dashboard
-        </p>
-      </div>
+    <Card className="w-full max-w-sm bg-card/95 backdrop-blur shadow-xl">
+      <CardHeader>
+        <CardTitle>Access your account</CardTitle>
+        <CardDescription>Enter your email below to login</CardDescription>
+        <CardAction>
+          <Button variant="link" className="text-primary">
+            Sign up
+          </Button>
+        </CardAction>
+      </CardHeader>
 
-      <div className="grid gap-6">
+      <CardContent>
         <form onSubmit={handleSubmit}>
-          <div className="grid gap-4">
+          <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                placeholder="name@company.com"
                 type="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                autoCorrect="off"
+                placeholder="name@example.com"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-11"
               />
             </div>
 
             <div className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-primary hover:underline"
-                  tabIndex={-1}
-                >
-                  Forgot password?
-                </a>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="type your password"
-                  autoCapitalize="none"
-                  autoCorrect="off"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-11 pr-10"
+                  className="pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
-                  tabIndex={-1}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col gap-2 mt-2">
-              <Button className="h-11 w-full">Sign In</Button>
-
-              <Button variant="outline" className="h-11 w-full" type="button">
-                Sign Up
-              </Button>
-            </div>
+          <div className="mt-6">
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="flex-col gap-2"></CardFooter>
+    </Card>
   );
 }

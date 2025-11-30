@@ -3,49 +3,29 @@ import { Zap, CircleDollarSign } from "lucide-react";
 
 function App() {
   return (
-    <div className="container relative min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 bg-zinc-900" />
-
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-zinc-900/50 to-zinc-900/0" />
-
-        <div className="relative z-20 flex h-full w-full flex-col items-center justify-center gap-8">
-          <div className="flex items-center gap-6">
-            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-zinc-800/50 border border-white/10 shadow-2xl backdrop-blur-sm transition-transform hover:scale-105 duration-500">
-              <Zap
-                size={48}
-                fill="currentColor"
-                className="text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]"
-              />
-            </div>
-
-            <div className="h-2 w-2 rounded-full bg-zinc-700" />
-
-            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-zinc-800/50 border border-white/10 shadow-2xl backdrop-blur-sm transition-transform hover:scale-105 duration-500 delay-100">
-              <CircleDollarSign
-                size={48}
-                className="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]"
-              />
-            </div>
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300 p-4 dark:from-zinc-800 dark:to-zinc-950">
+      <div className="mb-6 flex animate-in fade-in slide-in-from-top-4 duration-700">
+        <div className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/30 px-6 py-4 shadow-xl backdrop-blur-md dark:bg-black/30 dark:border-white/10">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 shadow-md text-white dark:bg-zinc-100 dark:text-zinc-900">
+            <Zap
+              size={20}
+              fill="currentColor"
+              className="text-yellow-400 dark:text-yellow-500"
+            />
           </div>
 
-          <div className="text-center space-y-2">
-            <h1 className="text-6xl font-bold tracking-tighter text-white drop-shadow-xl">
-              Expenzeus
-            </h1>
-            <p className="text-lg text-zinc-400 tracking-widest uppercase font-medium">
-              Financial Control
-            </p>
+          <h1 className="text-2xl font-bold tracking-tighter text-zinc-800 dark:text-zinc-100">
+            Expenzeus
+          </h1>
+
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 shadow-md text-white dark:bg-zinc-100 dark:text-zinc-900">
+            <CircleDollarSign size={20} className="text-green-500" />
           </div>
         </div>
       </div>
 
-      <div className="lg:p-8 flex h-full items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <Login />
-        </div>
+      <div className="w-full max-w-sm animate-in fade-in zoom-in duration-500">
+        <Login />
       </div>
     </div>
   );
