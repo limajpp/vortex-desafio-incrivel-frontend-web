@@ -98,7 +98,8 @@ export function ExpenseDialog({
               <Input
                 id="amount"
                 type="number"
-                step="0.01"
+                min="0.00"
+                step="5.00"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
@@ -118,7 +119,7 @@ export function ExpenseDialog({
           </div>
 
           <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} className="mt-6">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save Changes
             </Button>

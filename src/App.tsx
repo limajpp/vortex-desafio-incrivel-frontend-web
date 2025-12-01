@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { SignIn } from "./components/auth/signIn";
-import { SignUp } from "./components/auth/signUp";
+import { SignIn } from "./pages/auth/signIn";
+import { SignUp } from "./pages/auth/signUp";
 import { AuthLayout } from "./components/layouts/authLayout";
 import { Dashboard } from "./pages/dashboard";
-import { PrivateRoute, PublicRoute } from "./components/auth/authGuard";
+import { PrivateRoute, PublicRoute } from "./components/guards/authGuard";
 
 function App() {
   return (
