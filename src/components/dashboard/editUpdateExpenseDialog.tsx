@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { expenseService, type Expense } from "@/services/expense";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ExpenseDialogProps {
   open: boolean;
@@ -57,15 +58,16 @@ export function ExpenseDialog({
 
       if (expenseToEdit) {
         await expenseService.update(expenseToEdit.id, payload);
+        toast.success("Expense updated successfully!");
       } else {
         await expenseService.create(payload);
+        toast.success("Expense created successfully!");
       }
 
       onSuccess();
       onOpenChange(false);
     } catch (error) {
-      console.error(error);
-      alert("Failed to save expense");
+      toast.error("Failed to save expense. Please check the details.");
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +101,7 @@ export function ExpenseDialog({
                 id="amount"
                 type="number"
                 min="0.00"
-                step="5.00"
+                step="0.01"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}

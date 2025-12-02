@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2, Check, X } from "lucide-react";
 import { authService } from "../../services/auth";
+import { toast } from "sonner";
 
 export function SignUp() {
   const [name, setName] = useState("");
@@ -42,7 +43,7 @@ export function SignUp() {
 
     try {
       await authService.register(name, email, password);
-      alert("Account created successfully! Please sign in.");
+      toast.success("Account created successfully! Please sign in.");
       navigate("/login");
     } catch (err: any) {
       if (err.message) {

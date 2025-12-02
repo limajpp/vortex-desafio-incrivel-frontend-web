@@ -4,6 +4,7 @@ import { SignUp } from "./pages/auth/signUp";
 import { AuthLayout } from "./components/layouts/authLayout";
 import { Dashboard } from "./pages/dashboard";
 import { PrivateRoute, PublicRoute } from "./components/guards/authGuard";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      <Toaster />
     </BrowserRouter>
   );
 }

@@ -11,15 +11,22 @@ import {
 import { Zap, DollarSign, TrendingDown, Calendar, Plus } from "lucide-react";
 import { OverviewChart } from "../components/dashboard/overViewChart";
 import { RecentExpenses } from "../components/dashboard/recentExpenses";
-import { ExpenseDialog } from "../components/dashboard/expenseDialog";
+import { ExpenseDialog } from "../components/dashboard/editUpdateExpenseDialog";
+import { DeleteExpenseDialog } from "../components/dashboard/deleteExpenseDialog";
 import { expenseService, type Expense } from "@/services/expense";
+import { toast } from "sonner";
 
 export function Dashboard() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [_loading, setLoading] = useState(true);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [expenseToDeleteId, setExpenseToDeleteId] = useState<number | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -29,7 +36,7 @@ export function Dashboard() {
       const data = await expenseService.getAll();
       setExpenses(data);
     } catch (error) {
-      console.error("Failed to load expenses", error);
+      toast.error("Failed to load data");
     } finally {
       setLoading(false);
     }
@@ -41,28 +48,23 @@ export function Dashboard() {
 
   function handleLogout() {
     localStorage.removeItem("access_token");
+    toast.info("Logged out successfully");
     navigate("/login");
   }
 
   function handleCreate() {
     setSelectedExpense(null);
-    setIsDialogOpen(true);
+    setIsCreateDialogOpen(true);
   }
 
   function handleEdit(expense: Expense) {
     setSelectedExpense(expense);
-    setIsDialogOpen(true);
+    setIsCreateDialogOpen(true);
   }
 
-  async function handleDelete(id: number) {
-    if (confirm("Are you sure you want to delete this expense?")) {
-      try {
-        await expenseService.delete(id);
-        loadData();
-      } catch (error) {
-        alert("Failed to delete expense");
-      }
-    }
+  function handleDeleteClick(id: number) {
+    setExpenseToDeleteId(id);
+    setIsDeleteDialogOpen(true);
   }
 
   const totalExpenses = expenses.reduce((acc, curr) => acc + curr.amount, 0);
@@ -182,7 +184,7 @@ export function Dashboard() {
               <RecentExpenses
                 expenses={expenses}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={handleDeleteClick}
               />
             </CardContent>
           </Card>
@@ -190,9 +192,16 @@ export function Dashboard() {
       </div>
 
       <ExpenseDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
         expenseToEdit={selectedExpense}
+        onSuccess={loadData}
+      />
+
+      <DeleteExpenseDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        expenseId={expenseToDeleteId}
         onSuccess={loadData}
       />
     </div>
