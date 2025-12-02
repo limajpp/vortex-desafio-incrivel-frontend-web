@@ -13,6 +13,7 @@ import { OverviewChart } from "../components/dashboard/overViewChart";
 import { RecentExpenses } from "../components/dashboard/recentExpenses";
 import { ExpenseDialog } from "../components/dashboard/editUpdateExpenseDialog";
 import { DeleteExpenseDialog } from "../components/dashboard/deleteExpenseDialog";
+import { LogoutDialog } from "../components/dashboard/logoutDialog";
 import { expenseService, type Expense } from "@/services/expense";
 import { toast } from "sonner";
 
@@ -22,6 +23,7 @@ export function Dashboard() {
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [expenseToDeleteId, setExpenseToDeleteId] = useState<number | null>(
@@ -36,7 +38,7 @@ export function Dashboard() {
       const data = await expenseService.getAll();
       setExpenses(data);
     } catch (error) {
-      toast.error("Failed to load data");
+      toast.error("Failed to load data...");
     } finally {
       setLoading(false);
     }
@@ -46,7 +48,10 @@ export function Dashboard() {
     loadData();
   }, []);
 
-  function handleLogout() {
+  function handleLogoutClick() {
+    setIsLogoutDialogOpen(true);
+  }
+  function confirmLogout() {
     localStorage.removeItem("access_token");
     toast.info("Logged out successfully");
     navigate("/login");
@@ -94,7 +99,7 @@ export function Dashboard() {
             <Button
               variant="outline"
               className="flex-1 md:flex-none"
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
             >
               Logout
             </Button>
@@ -203,6 +208,12 @@ export function Dashboard() {
         onOpenChange={setIsDeleteDialogOpen}
         expenseId={expenseToDeleteId}
         onSuccess={loadData}
+      />
+
+      <LogoutDialog
+        open={isLogoutDialogOpen}
+        onOpenChange={setIsLogoutDialogOpen}
+        onConfirm={confirmLogout}
       />
     </div>
   );
