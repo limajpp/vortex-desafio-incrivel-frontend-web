@@ -20,6 +20,8 @@ interface ExpenseDialogProps {
   onSuccess: () => void;
 }
 
+const MAX_AMOUNT = 99999999.99;
+
 export function ExpenseDialog({
   open,
   onOpenChange,
@@ -49,10 +51,20 @@ export function ExpenseDialog({
     e.preventDefault();
     setIsLoading(true);
 
+    const numericAmount = Number(amount);
+
+    if (numericAmount > MAX_AMOUNT) {
+      toast.error(
+        `Amount cannot exceed R$ ${MAX_AMOUNT.toLocaleString("pt-BR")}`
+      );
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const payload = {
         description,
-        amount: Number(amount),
+        amount: numericAmount,
         date: date,
       };
 
@@ -97,6 +109,7 @@ export function ExpenseDialog({
               onChange={(e) => setDescription(e.target.value)}
               className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-700 focus-visible:ring-yellow-500"
               required
+              maxLength={255}
             />
           </div>
 
@@ -112,6 +125,7 @@ export function ExpenseDialog({
                 id="amount"
                 type="number"
                 min="0.00"
+                max={MAX_AMOUNT}
                 step="0.01"
                 placeholder="0.00"
                 value={amount}

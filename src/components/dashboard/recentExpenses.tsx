@@ -33,9 +33,9 @@ export function RecentExpenses({
   };
 
   return (
-    <div className="rounded-md border border-zinc-200 dark:border-zinc-800">
+    <div className="rounded-md border border-zinc-200 dark:border-zinc-800 max-h-[400px] overflow-y-auto relative">
       <Table>
-        <TableHeader>
+        <TableHeader className="sticky top-0 bg-zinc-50 dark:bg-zinc-900 z-10 shadow-sm">
           <TableRow className="hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800">
             <TableHead className="font-extrabold text-zinc-900 dark:text-white">
               Description
