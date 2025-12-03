@@ -75,28 +75,39 @@ export function ExpenseDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-zinc-900 dark:text-white">
             {expenseToEdit ? "Edit Expense" : "New Expense"}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="description">Description</Label>
+            <Label
+              htmlFor="description"
+              className="font-bold text-zinc-700 dark:text-zinc-300"
+            >
+              Description
+            </Label>
             <Input
               id="description"
               placeholder="Ex: Grocery, Uber..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-700 focus-visible:ring-yellow-500"
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="amount">Amount (R$)</Label>
+              <Label
+                htmlFor="amount"
+                className="font-bold text-zinc-700 dark:text-zinc-300"
+              >
+                Amount (R$)
+              </Label>
               <Input
                 id="amount"
                 type="number"
@@ -105,23 +116,34 @@ export function ExpenseDialog({
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-700 focus-visible:ring-yellow-500"
                 required
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="date">Date</Label>
+              <Label
+                htmlFor="date"
+                className="font-bold text-zinc-700 dark:text-zinc-300"
+              >
+                Date
+              </Label>
               <Input
                 id="date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-700 focus-visible:ring-yellow-500"
                 required
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="submit" disabled={isLoading} className="mt-6">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="mt-6 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-black dark:hover:bg-zinc-200 font-bold"
+            >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save Changes
             </Button>
