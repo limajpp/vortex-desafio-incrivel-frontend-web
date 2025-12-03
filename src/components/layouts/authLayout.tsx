@@ -1,10 +1,27 @@
 import { Outlet } from "react-router-dom";
-import { Zap, CircleDollarSign } from "lucide-react";
+import { Zap, CircleDollarSign, Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/themeProvider";
 
 export function AuthLayout() {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted text-white lg:flex dark:border-r">
+      <div className="absolute right-4 top-4 md:right-8 md:top-8 z-50">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="rounded-full text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+        >
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </div>
+
+      <div className="relative hidden h-full flex-col bg-muted text-white lg:flex dark:border-r border-zinc-800">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-zinc-900/50 to-zinc-900/0" />
@@ -37,7 +54,7 @@ export function AuthLayout() {
         </div>
       </div>
 
-      <div className="lg:p-8 flex h-full items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+      <div className="lg:p-8 flex h-full items-center justify-center bg-zinc-50 dark:bg-black transition-colors duration-300">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <Outlet />
         </div>

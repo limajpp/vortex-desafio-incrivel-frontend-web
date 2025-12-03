@@ -67,7 +67,7 @@ export function ExpenseDialog({
       onSuccess();
       onOpenChange(false);
     } catch (error) {
-      toast.error("Failed to save expense. Please check the details.");
+      toast.error("Failed to save expense.");
     } finally {
       setIsLoading(false);
     }

@@ -11,9 +11,13 @@ import type { Expense } from "@/services/expense";
 
 interface OverviewChartProps {
   data: Expense[];
+  isDarkMode?: boolean; 
 }
 
-export function OverviewChart({ data }: OverviewChartProps) {
+export function OverviewChart({
+  data,
+  isDarkMode = false,
+}: OverviewChartProps) {
   const chartData = useMemo(() => {
     const months = [
       { name: "Jan", total: 0 },
@@ -37,7 +41,6 @@ export function OverviewChart({ data }: OverviewChartProps) {
 
       if (expenseDate.getFullYear() === currentYear) {
         const monthIndex = expenseDate.getMonth();
-
         months[monthIndex].total += Number(expense.amount);
       }
     });
@@ -45,19 +48,23 @@ export function OverviewChart({ data }: OverviewChartProps) {
     return months;
   }, [data]);
 
+  const axisColor = isDarkMode ? "#e4e4e7" : "#18181b";
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={chartData}>
         <XAxis
           dataKey="name"
-          stroke="#888888"
+          stroke={axisColor}
           fontSize={12}
+          fontWeight={700}
           tickLine={false}
           axisLine={false}
         />
         <YAxis
-          stroke="#888888"
+          stroke={axisColor}
           fontSize={12}
+          fontWeight={700}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `R$${value}`}
@@ -68,8 +75,10 @@ export function OverviewChart({ data }: OverviewChartProps) {
             borderRadius: "8px",
             border: "none",
             boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            color: "#000",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            color: "#09090b",
+            fontWeight: "bold",
+            fontSize: "14px",
           }}
           formatter={(value: number) => [`R$ ${value.toFixed(2)}`, "Total"]}
         />
