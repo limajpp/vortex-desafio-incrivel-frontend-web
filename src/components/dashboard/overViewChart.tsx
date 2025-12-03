@@ -11,7 +11,7 @@ import type { Expense } from "@/services/expense";
 
 interface OverviewChartProps {
   data: Expense[];
-  isDarkMode?: boolean; 
+  isDarkMode?: boolean;
 }
 
 export function OverviewChart({
@@ -50,6 +50,19 @@ export function OverviewChart({
 
   const axisColor = isDarkMode ? "#e4e4e7" : "#18181b";
 
+  const formatYAxis = (value: number) => {
+    if (value >= 1000000000) {
+      return `R$${(value / 1000000000).toFixed(1)}B`;
+    }
+    if (value >= 1000000) {
+      return `R$${(value / 1000000).toFixed(1)}M`;
+    }
+    if (value >= 1000) {
+      return `R$${(value / 1000).toFixed(0)}k`;
+    }
+    return `R$${value}`;
+  };
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={chartData}>
@@ -67,7 +80,8 @@ export function OverviewChart({
           fontWeight={700}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `R$${value}`}
+          tickFormatter={formatYAxis}
+          width={80}
         />
         <Tooltip
           cursor={{ fill: "transparent" }}
@@ -80,7 +94,13 @@ export function OverviewChart({
             fontWeight: "bold",
             fontSize: "14px",
           }}
-          formatter={(value: number) => [`R$ ${value.toFixed(2)}`, "Total"]}
+          formatter={(value: number) => [
+            new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(value),
+            "Total",
+          ]}
         />
         <Bar
           dataKey="total"

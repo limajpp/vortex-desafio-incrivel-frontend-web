@@ -37,7 +37,7 @@ export function ExpenseDialog({
     if (open) {
       if (expenseToEdit) {
         setDescription(expenseToEdit.description);
-        setAmount(expenseToEdit.amount.toString());
+        setAmount(expenseToEdit.amount.toString().replace(".", ","));
         setDate(expenseToEdit.date.split("T")[0]);
       } else {
         setDescription("");
@@ -47,11 +47,35 @@ export function ExpenseDialog({
     }
   }, [open, expenseToEdit]);
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+
+    value = value.replace(".", ",");
+    value = value.replace(/[^0-9,]/g, "");
+
+    const parts = value.split(",");
+    if (parts.length > 2) {
+      value = parts[0] + "," + parts.slice(1).join("");
+    }
+
+    if (parts.length === 2 && parts[1].length > 2) {
+      value = parts[0] + "," + parts[1].substring(0, 2);
+    }
+
+    setAmount(value);
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
 
-    const numericAmount = Number(amount);
+    const numericAmount = Number(amount.replace(",", "."));
+
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      toast.error("Please enter a valid positive amount.");
+      setIsLoading(false);
+      return;
+    }
 
     if (numericAmount > MAX_AMOUNT) {
       toast.error(
@@ -123,13 +147,11 @@ export function ExpenseDialog({
               </Label>
               <Input
                 id="amount"
-                type="number"
-                min="0.00"
-                max={MAX_AMOUNT}
-                step="0.01"
-                placeholder="0.00"
+                type="text"
+                inputMode="decimal"
+                placeholder="0,00"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={handleAmountChange}
                 className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-700 focus-visible:ring-yellow-500"
                 required
               />
