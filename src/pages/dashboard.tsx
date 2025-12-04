@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Zap,
+  Dog,
   DollarSign,
   TrendingDown,
   Calendar,
@@ -136,14 +136,14 @@ export function Dashboard() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-2xl transition-all">
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-500 text-black shadow-lg shadow-yellow-500/20 ring-1 ring-yellow-400/50">
-                <Zap size={28} fill="currentColor" className="drop-shadow-sm" />
+                <Dog size={32} strokeWidth={2.5} className="drop-shadow-sm" />
               </div>
               <div>
                 <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                  ExpenZeus
+                  Expenzeus
                 </h1>
-                <p className="text-zinc-700 dark:text-zinc-300 font-bold text-sm mt-1">
-                  Financial Control Panel
+                <p className="text-zinc-700 dark:text-zinc-300 font-bold text-sm mt-1 flex items-center gap-2">
+                  Financial Control
                 </p>
               </div>
             </div>
