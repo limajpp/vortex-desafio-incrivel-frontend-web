@@ -12,11 +12,13 @@ import type { Expense } from "@/services/expense";
 interface OverviewChartProps {
   data: Expense[];
   isDarkMode?: boolean;
+  year: number;
 }
 
 export function OverviewChart({
   data,
   isDarkMode = false,
+  year,
 }: OverviewChartProps) {
   const chartData = useMemo(() => {
     const months = [
@@ -34,32 +36,29 @@ export function OverviewChart({
       { name: "Dec", total: 0 },
     ];
 
-    const currentYear = new Date().getFullYear();
-
     data.forEach((expense) => {
-      const expenseDate = new Date(expense.date);
+      if (!expense.date) return;
 
-      if (expenseDate.getFullYear() === currentYear) {
-        const monthIndex = expenseDate.getMonth();
-        months[monthIndex].total += Number(expense.amount);
+      const dateStr = expense.date.toString();
+      const [expenseYearStr, expenseMonthStr] = dateStr.split("-");
+
+      const expenseYear = Number(expenseYearStr);
+      const expenseMonthIndex = Number(expenseMonthStr) - 1;
+
+      if (expenseYear === year) {
+        months[expenseMonthIndex].total += Number(expense.amount);
       }
     });
 
     return months;
-  }, [data]);
+  }, [data, year]);
 
   const axisColor = isDarkMode ? "#e4e4e7" : "#18181b";
 
   const formatYAxis = (value: number) => {
-    if (value >= 1000000000) {
-      return `R$${(value / 1000000000).toFixed(1)}B`;
-    }
-    if (value >= 1000000) {
-      return `R$${(value / 1000000).toFixed(1)}M`;
-    }
-    if (value >= 1000) {
-      return `R$${(value / 1000).toFixed(0)}k`;
-    }
+    if (value >= 1000000000) return `R$${(value / 1000000000).toFixed(1)}B`;
+    if (value >= 1000000) return `R$${(value / 1000000).toFixed(1)}M`;
+    if (value >= 1000) return `R$${(value / 1000).toFixed(0)}k`;
     return `R$${value}`;
   };
 

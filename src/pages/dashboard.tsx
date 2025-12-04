@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +26,13 @@ import { LogoutDialog } from "../components/dashboard/logoutDialog";
 import { expenseService, type Expense } from "@/services/expense";
 import { toast } from "sonner";
 import { useTheme } from "@/components/themeProvider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function Dashboard() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -36,6 +43,11 @@ export function Dashboard() {
     theme === "dark" ||
     (theme === "system" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState<string>(
+    currentYear.toString()
+  );
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -63,6 +75,22 @@ export function Dashboard() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const availableYears = useMemo(() => {
+    const years = new Set<number>();
+    years.add(currentYear);
+
+    expenses.forEach((expense) => {
+      if (expense.date) {
+        const year = parseInt(expense.date.toString().split("-")[0]);
+        if (!isNaN(year)) {
+          years.add(year);
+        }
+      }
+    });
+
+    return Array.from(years).sort((a, b) => b - a);
+  }, [expenses, currentYear]);
 
   function toggleTheme() {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -98,13 +126,12 @@ export function Dashboard() {
     (max, curr) => Math.max(max, curr.amount),
     0
   );
-  const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen w-full bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 transition-colors duration-300 font-sans selection:bg-yellow-500/30">
+    <div className="min-h-screen w-full bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 transition-colors duration-300 font-sans selection:bg-yellow-500/30 overflow-x-hidden">
       <div className="hidden dark:block absolute top-[-10%] left-[50%] -translate-x-1/2 w-[40%] h-[30%] rounded-full bg-yellow-600/10 blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 p-4 md:p-8">
+      <div className="relative z-10 p-4 md:p-8 max-w-[100vw]">
         <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-2xl transition-all">
             <div className="flex items-center gap-4">
@@ -113,7 +140,7 @@ export function Dashboard() {
               </div>
               <div>
                 <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                  Expenzeus
+                  ExpenZeus
                 </h1>
                 <p className="text-zinc-700 dark:text-zinc-300 font-bold text-sm mt-1">
                   Financial Control Panel
@@ -217,16 +244,36 @@ export function Dashboard() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4 bg-white dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-lg font-bold text-zinc-900 dark:text-white">
-                  Overview
-                </CardTitle>
-                <CardDescription className="font-semibold text-zinc-600 dark:text-zinc-400">
-                  Monthly expenses for {currentYear}
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <div className="space-y-1">
+                  <CardTitle className="text-lg font-bold text-zinc-900 dark:text-white">
+                    Overview
+                  </CardTitle>
+                  <CardDescription className="font-semibold text-zinc-600 dark:text-zinc-400">
+                    Monthly expenses analysis
+                  </CardDescription>
+                </div>
+                <div className="w-[120px]">
+                  <Select value={selectedYear} onValueChange={setSelectedYear}>
+                    <SelectTrigger className="bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-bold">
+                      <SelectValue placeholder="Year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableYears.map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </CardHeader>
               <CardContent className="pl-2">
-                <OverviewChart data={expenses} isDarkMode={isDark} />
+                <OverviewChart
+                  data={expenses}
+                  isDarkMode={isDark}
+                  year={Number(selectedYear)}
+                />
               </CardContent>
             </Card>
 
