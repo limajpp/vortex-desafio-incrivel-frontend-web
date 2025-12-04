@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { expenseService, type Expense } from "@/services/expense";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { removeEmojis } from "@/lib/utils";
 
 interface ExpenseDialogProps {
   open: boolean;
@@ -49,19 +50,15 @@ export function ExpenseDialog({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-
     value = value.replace(".", ",");
     value = value.replace(/[^0-9,]/g, "");
-
     const parts = value.split(",");
     if (parts.length > 2) {
       value = parts[0] + "," + parts.slice(1).join("");
     }
-
     if (parts.length === 2 && parts[1].length > 2) {
       value = parts[0] + "," + parts[1].substring(0, 2);
     }
-
     setAmount(value);
   };
 
@@ -130,7 +127,7 @@ export function ExpenseDialog({
               id="description"
               placeholder="Ex: Grocery, Uber..."
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => setDescription(removeEmojis(e.target.value))}
               className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-700 focus-visible:ring-yellow-500"
               required
               maxLength={255}
