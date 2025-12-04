@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2, Check, X } from "lucide-react";
 import { authService } from "../../services/auth";
 import { toast } from "sonner";
+import { removeEmojis } from "@/lib/utils";
 
 export function SignUp() {
   const [name, setName] = useState("");
@@ -98,7 +99,7 @@ export function SignUp() {
                 autoCapitalize="words"
                 autoCorrect="off"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(removeEmojis(e.target.value))}
                 className="h-11 font-medium bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700"
                 required
               />
@@ -119,7 +120,7 @@ export function SignUp() {
                 autoComplete="email"
                 autoCorrect="off"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(removeEmojis(e.target.value))}
                 className="h-11 font-medium bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700"
                 required
               />
@@ -140,7 +141,7 @@ export function SignUp() {
                   autoCapitalize="none"
                   autoCorrect="off"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(removeEmojis(e.target.value))}
                   className="h-11 pr-10 font-medium bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700"
                   required
                 />
