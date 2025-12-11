@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2, Check, X } from "lucide-react";
+import { Eye, EyeOff, Loader2, Check, X, AlertCircle } from "lucide-react";
 import { authService } from "../../services/auth";
 import { toast } from "sonner";
 import { removeEmojis } from "@/lib/utils";
@@ -12,6 +12,7 @@ export function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -30,12 +31,18 @@ export function SignUp() {
   }, [password]);
 
   const isPasswordStrong = passwordRequirements.every((req) => req.valid);
+  const passwordsMatch = password === confirmPassword;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (!isPasswordStrong) {
       setError("Please ensure your password meets all requirements.");
+      return;
+    }
+
+    if (!passwordsMatch) {
+      setError("Passwords do not match.");
       return;
     }
 
@@ -145,6 +152,7 @@ export function SignUp() {
                   className="h-11 pr-10 font-medium bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700"
                   required
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -155,19 +163,41 @@ export function SignUp() {
                 </button>
               </div>
 
+              <div className="relative mt-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Repeat your password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) =>
+                    setConfirmPassword(removeEmojis(e.target.value))
+                  }
+                  className={`h-9 ${
+                    confirmPassword && !passwordsMatch
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }`}
+                />
+                {confirmPassword && !passwordsMatch && (
+                  <div className="flex items-center gap-1 text-[10px] text-red-500 mt-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <span>Passwords do not match</span>
+                  </div>
+                )}
+              </div>
+
               <div className="space-y-1.5 pt-1">
                 <p className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2">
                   Password must contain:
                 </p>
                 {passwordRequirements.map((req, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 text-xs transition-colors duration-200"
-                  >
+                  <div key={index} className="flex items-center gap-2 text-xs">
                     {req.valid ? (
-                      <Check size={14} className="text-emerald-600 font-bold" />
+                      <Check size={14} className="text-emerald-600" />
                     ) : (
-                      <X size={14} className="text-zinc-400 font-bold" />
+                      <X size={14} className="text-zinc-400" />
                     )}
                     <span
                       className={
@@ -185,7 +215,7 @@ export function SignUp() {
 
             <Button
               className="h-11 w-full mt-2 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-black dark:hover:bg-zinc-200 font-bold"
-              disabled={isLoading || !isPasswordStrong}
+              disabled={isLoading || !isPasswordStrong || !passwordsMatch}
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create Account
