@@ -1,73 +1,86 @@
-# React + TypeScript + Vite
+# 💻 Desafio Incrível - Expenzeus (Vortex)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A central de comando do ecossistema Vortex. Um dashboard administrativo focado em análise de dados, visualização gráfica e gestão detalhada de despesas.
 
-Currently, two official plugins are available:
+## 📖 Sobre o Projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este projeto é o Front-end Web do Desafio Vortex. Enquanto o aplicativo móvel foca na agilidade de inserção, esta aplicação web oferece uma visão macro da vida financeira do usuário.
 
-## React Compiler
+Desenvolvido com React e Vite, o projeto utiliza componentes modernos do shadcn/ui para criar uma interface limpa, acessível e responsiva, com suporte nativo a temas (Dark/Light Mode).
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## ✨ Funcionalidades
 
-## Expanding the ESLint configuration
+### 📊 Dashboard Analítico
+- Visão Geral: Gráfico de barras interativo mostrando o fluxo de despesas por mês/ano.
+- Tabela Detalhada: Listagem completa de gastos com paginação e formatação monetária.
+- Resumos: Cards de destaque com totais calculados automaticamente.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🔐 Autenticação & Segurança
+- Login & Cadastro: Interface elegante com validação de formulários em tempo real.
+- Proteção de Rotas: Sistema de AuthGuard que impede acesso não autorizado às páginas internas.
+- Persistência: Gerenciamento automático de tokens JWT no localStorage.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🛠️ Gestão Completa (CRUD)
+- Adicionar/Editar: Modais intuitivos para criar ou corrigir lançamentos.
+- Excluir: Remoção de registros com confirmação de segurança.
+- Feedback Visual: Notificações (Toasts) para sucesso ou erro em todas as operações.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech Stack
+- Core: React + Vite
+- Linguagem: TypeScript
+- Estilização: Tailwind CSS
+- Componentes UI: shadcn/ui (baseado em Radix UI)
+- Gráficos: Recharts
+- Formulários: React Hook Form (implícito na lógica) + Validações manuais robustas
+- HTTP Client: Axios
+- Ícones: Lucide React
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🏃‍♂️ Como Rodar
+
+### Pré-requisitos
+- Node.js (v18+) e npm/yarn/pnpm instalados.
+- A API do Vortex rodando (localmente ou em produção).
+
+### Passo a Passo
+
+Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/vortex-desafio-frontend-web.git
+cd vortex-frontend-web
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Instale as dependências:
+```bash
+npm install
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Configure a API:
+- Verifique o arquivo `src/services/api.ts`.
+- Por padrão, ele pode apontar para `http://localhost:3000/`. Se necessário, ajuste a `baseURL`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Inicie o servidor de desenvolvimento:
+```bash
+npm run dev
+```
+
+Acesse:
+- O projeto estará disponível em http://localhost:5173.
+
+## 📂 Estrutura do Projeto
+
+```text
+src/
+├── components/
+│   ├── dashboard/      # Widgets específicos (Gráficos, Tabelas, Dialogs)
+│   ├── guards/         # Proteção de rotas (AuthGuard)
+│   ├── layouts/        # Layouts de página (AuthLayout)
+│   └── ui/             # Componentes base (Botões, Inputs, Cards - shadcn)
+├── lib/                # Utilitários (cn, formatters)
+├── pages/
+│   ├── auth/           # Telas de Login e Registro
+│   └── dashboard.tsx   # Tela principal
+├── services/           # Comunicação com API (Axios)
+└── App.tsx             # Configuração de Rotas
+
+---
 ```
