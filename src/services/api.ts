@@ -1,4 +1,5 @@
-export const API_URL = "https://vortex-desafio-incrivel-api.onrender.com";
+export const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/v1/api";
 
 export async function handleResponse(response: Response) {
   if (!response.ok) {
